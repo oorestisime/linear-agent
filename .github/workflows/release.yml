@@ -12,64 +12,27 @@ on:
 jobs:
   build-and-release:
     name: Build and Release
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            artifact_name: linear-agent
-            asset_name: linear-agent-linux-amd64
-          - os: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-            artifact_name: linear-agent
-            asset_name: linear-agent-linux-arm64
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            artifact_name: linear-agent
-            asset_name: linear-agent-macos-amd64
-          - os: macos-latest
-            target: aarch64-apple-darwin
-            artifact_name: linear-agent
-            asset_name: linear-agent-macos-arm64
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            artifact_name: linear-agent.exe
-            asset_name: linear-agent-windows-amd64.exe
-
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
-
-      - name: Install cross-compilation tools (Linux ARM64)
-        if: matrix.target == 'aarch64-unknown-linux-gnu'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu
 
       - name: Build
-        run: cargo build --release --target ${{ matrix.target }}
+        run: cargo build --release
 
       - name: Prepare artifact
-        shell: bash
         run: |
           mkdir -p artifacts
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            cp target/${{ matrix.target }}/release/${{ matrix.artifact_name }} artifacts/${{ matrix.asset_name }}
-          else
-            cp target/${{ matrix.target }}/release/${{ matrix.artifact_name }} artifacts/${{ matrix.asset_name }}
-            chmod +x artifacts/${{ matrix.asset_name }}
-          fi
+          cp target/release/linear-agent artifacts/linear-agent
+          chmod +x artifacts/linear-agent
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.asset_name }}
-          path: artifacts/${{ matrix.asset_name }}
+          name: linear-agent
+          path: artifacts/linear-agent
           if-no-files-found: error
 
   create-release:
@@ -103,8 +66,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            artifacts/linear-agent-linux-amd64/linear-agent-linux-amd64
-            artifacts/linear-agent-linux-arm64/linear-agent-linux-arm64
-            artifacts/linear-agent-macos-amd64/linear-agent-macos-amd64
-            artifacts/linear-agent-macos-arm64/linear-agent-macos-arm64
-            artifacts/linear-agent-windows-amd64.exe/linear-agent-windows-amd64.exe
+            artifacts/linear-agent/linear-agent
