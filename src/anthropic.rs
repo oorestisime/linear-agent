@@ -18,6 +18,14 @@ impl AnthropicClient {
         }
     }
     
+    /// Create a new client from AppConfig
+    pub fn from_config(app_config: &crate::config::AppConfig) -> Option<Self> {
+        app_config.anthropic_api_key.as_ref().map(|key| Self {
+            client: Client::new(),
+            api_key: key.clone(),
+        })
+    }
+    
     /// Test the connection to the Anthropic API
     pub async fn test_connection(&self) -> Result<String> {
         let response = self.generate_text(

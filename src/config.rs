@@ -14,7 +14,7 @@ const DEFAULT_CONFIG_DIR: &str = ".linear-agent";
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct AppConfig {
     pub linear_api_key: String,
-    pub anthropic_api_key: String,
+    pub anthropic_api_key: Option<String>,
     pub linear_team_name: String,
     pub linear_agent_user: String,
     pub linear_agent_states: Vec<String>,
@@ -25,7 +25,7 @@ impl Default for AppConfig {
     fn default() -> Self {
         Self {
             linear_api_key: String::new(),
-            anthropic_api_key: String::new(),
+            anthropic_api_key: None,
             linear_team_name: "Engineering".to_string(),
             linear_agent_user: String::new(),
             linear_agent_states: vec!["Open".to_string(), "In Progress".to_string()],
@@ -47,8 +47,9 @@ impl AppConfig {
             config.linear_api_key = key;
         }
         
+        // Make Anthropic API key optional
         if let Ok(key) = env::var("ANTHROPIC_API_KEY") {
-            config.anthropic_api_key = key;
+            config.anthropic_api_key = Some(key);
         }
         
         if let Ok(team) = env::var("LINEAR_TEAM_NAME") {
@@ -110,7 +111,10 @@ impl AppConfig {
         // Create the .env file content
         let mut content = String::new();
         content.push_str(&format!("LINEAR_API_KEY={}\n", self.linear_api_key));
-        content.push_str(&format!("ANTHROPIC_API_KEY={}\n", self.anthropic_api_key));
+        // Include Anthropic API key if available
+        if let Some(api_key) = &self.anthropic_api_key {
+            content.push_str(&format!("ANTHROPIC_API_KEY={}\n", api_key));
+        }
         content.push_str(&format!("LINEAR_TEAM_NAME={}\n", self.linear_team_name));
         content.push_str(&format!("LINEAR_AGENT_USER={}\n", self.linear_agent_user));
         content.push_str(&format!("LINEAR_AGENT_STATES={}\n", self.linear_agent_states.join(",")));

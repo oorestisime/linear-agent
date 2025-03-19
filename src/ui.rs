@@ -88,10 +88,16 @@ pub async fn setup_wizard() -> Result<AppConfig> {
         .allow_empty(false)
         .interact_text()?;
     
-    config.anthropic_api_key = Input::new()
-        .with_prompt("Anthropic API Key")
-        .allow_empty(false)
+    let anthropic_key: String = Input::new()
+        .with_prompt("Anthropic API Key (leave empty to skip if not using plan generation)")
+        .allow_empty(true)
         .interact_text()?;
+        
+    config.anthropic_api_key = if anthropic_key.trim().is_empty() {
+        None
+    } else {
+        Some(anthropic_key)
+    };
     
     // Ask for Linear settings
     config.linear_team_name = Input::new()

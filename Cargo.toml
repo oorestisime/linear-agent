@@ -1,6 +1,6 @@
 [package]
 name = "linear-agent"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2021"
 authors = ["Your Name <your.email@example.com>"]
 description = "A CLI tool for generating implementation plans from Linear tickets using Claude"

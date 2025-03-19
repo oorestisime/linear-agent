@@ -174,9 +174,15 @@ async fn main() -> Result<()> {
             // Load configuration
             let app_config = config::AppConfig::load(None, &args).await?;
             
-            // Test Anthropic API connection
+            // Test Anthropic API connection - required for plan generation
             println!("\n{}", "Testing Anthropic API connection...".blue());
-            let anthropic_client = anthropic::AnthropicClient::new(&app_config.anthropic_api_key);
+            let anthropic_client = match anthropic::AnthropicClient::from_config(&app_config) {
+                Some(client) => client,
+                None => {
+                    println!("\n{}", "❌ Error: Anthropic API key not found. Please provide ANTHROPIC_API_KEY in your .env file to generate plans.".red());
+                    return Ok(());
+                }
+            };
             
             let anthropic_test = anthropic_client.test_connection().await;
             if anthropic_test.is_err() {
@@ -377,7 +383,13 @@ async fn main() -> Result<()> {
         if args.plan {
             // We need to test the Anthropic API connection first
             println!("\n{}", "Testing Anthropic API connection...".blue());
-            let anthropic_client = anthropic::AnthropicClient::new(&app_config.anthropic_api_key);
+            let anthropic_client = match anthropic::AnthropicClient::from_config(&app_config) {
+                Some(client) => client,
+                None => {
+                    println!("\n{}", "❌ Error: Anthropic API key not found. Please provide ANTHROPIC_API_KEY in your .env file to generate plans.".red());
+                    return Ok(());
+                }
+            };
             
             let anthropic_test = anthropic_client.test_connection().await;
             if anthropic_test.is_err() {
@@ -463,20 +475,39 @@ async fn main() -> Result<()> {
         config::AppConfig::load(None, &args).await?
     };
 
-    // Test API connections
-    println!("\n{}", "Testing API connections...".blue());
+    // Test Linear API connection
+    println!("\n{}", "Testing Linear API connection...".blue());
     let linear_client = linear::LinearClient::new(&app_config.linear_api_key);
-    let anthropic_client = anthropic::AnthropicClient::new(&app_config.anthropic_api_key);
-
     let linear_test = linear_client.test_connection(args.verbose).await;
-    let anthropic_test = anthropic_client.test_connection().await;
 
-    if linear_test.is_err() || anthropic_test.is_err() {
-        println!("\n{}", "❌ Error: One or more API connections failed. Please check your API keys and try again.".red());
+    if linear_test.is_err() {
+        println!("\n{}", "❌ Error: Linear API connection failed. Please check your API key and try again.".red());
         return Ok(());
     }
 
-    println!("\n{}", "✅ API connections successful".green());
+    // Test Anthropic API connection only if needed for plan generation
+    let anthropic_client = if args.plan {
+        println!("\n{}", "Testing Anthropic API connection...".blue());
+        let client = match anthropic::AnthropicClient::from_config(&app_config) {
+            Some(client) => client,
+            None => {
+                println!("\n{}", "❌ Error: Anthropic API key not found. Please provide ANTHROPIC_API_KEY in your .env file to generate plans.".red());
+                return Ok(());
+            }
+        };
+        
+        let anthropic_test = client.test_connection().await;
+        if anthropic_test.is_err() {
+            println!("\n{}", "❌ Error: Anthropic API connection failed. Please check your API key and try again.".red());
+            return Ok(());
+        }
+        
+        Some(client)
+    } else {
+        None
+    };
+
+    println!("\n{}", "✅ API connection(s) successful".green());
 
     // Fetch tickets assigned to the user
     println!("\n{}", format!("Fetching tickets assigned to {}...", app_config.linear_agent_user).blue());
@@ -638,7 +669,7 @@ async fn main() -> Result<()> {
                               i + 1, enriched_tickets.len(), ticket.title).blue());
             
             // Generate implementation plan
-            let implementation_plan = anthropic_client
+            let implementation_plan = anthropic_client.as_ref().unwrap()
                 .generate_implementation_plan(ticket, &app_config.anthropic_model)
                 .await?;
             
