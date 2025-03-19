@@ -1,6 +1,6 @@
-This tool was ** Vibe Coded ** . No guarantees it works for your usecase and also no guarantees i ll keep maintaining :D
-
 # Linear Agent
+
+> **Note**: This tool was vibe coded using Claude Code. I'm not sure if I'll continue maintaining it. Use at your own discretion.
 
 A CLI tool that fetches tickets from Linear, enriches them with detailed information, and uses Claude to generate implementation plans.
 
@@ -25,48 +25,27 @@ A CLI tool that fetches tickets from Linear, enriches them with detailed informa
 
 ### Download pre-built binaries
 
-You can download pre-built binaries for your platform from the [GitHub Releases](https://github.com/yourusername/linear-agent/releases) page.
+You can download pre-built binaries from the [GitHub Releases](https://github.com/yourusername/linear-agent/releases) page.
 
-Available binaries:
+**Note**: Currently only a single binary is published. The releases may be outdated.
 
-- Linux (x86_64): `linear-agent-linux-amd64`
-- Linux (ARM64): `linear-agent-linux-arm64`
-- macOS (x86_64): `linear-agent-macos-amd64`
-- macOS (Apple Silicon): `linear-agent-macos-arm64`
-- Windows: `linear-agent-windows-amd64.exe`
+#### Installation
 
-#### One-line installation (Linux/macOS)
-
-For Linux (x86_64):
+Download the binary from the releases page, then make it executable:
 
 ```bash
-curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-linux-amd64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/
+chmod +x linear-agent
 ```
 
-For macOS (Intel):
-
+Move to your local bin directory (recommended, doesn't require sudo):
 ```bash
-curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-macos-amd64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/
+mkdir -p ~/.local/bin
+mv linear-agent ~/.local/bin/
 ```
 
-For macOS (Apple Silicon):
-
+Make sure ~/.local/bin is in your PATH. Add this to your ~/.bashrc or ~/.zshrc:
 ```bash
-curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-macos-arm64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/
-```
-
-#### Manual installation
-
-After downloading, make the file executable (Linux/macOS):
-
-```bash
-chmod +x linear-agent-*
-```
-
-Move the executable to a location in your PATH:
-
-```bash
-sudo mv linear-agent-* /usr/local/bin/linear-agent
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
 ### Updating
