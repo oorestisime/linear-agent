@@ -1,3 +1,5 @@
+This tool was ** Vibe Coded ** . No guarantees it works for your usecase and also no guarantees i ll keep maintaining :D
+
 # Linear Agent
 
 A CLI tool that fetches tickets from Linear, enriches them with detailed information, and uses Claude to generate implementation plans.
@@ -26,6 +28,7 @@ A CLI tool that fetches tickets from Linear, enriches them with detailed informa
 You can download pre-built binaries for your platform from the [GitHub Releases](https://github.com/yourusername/linear-agent/releases) page.
 
 Available binaries:
+
 - Linux (x86_64): `linear-agent-linux-amd64`
 - Linux (ARM64): `linear-agent-linux-arm64`
 - macOS (x86_64): `linear-agent-macos-amd64`
@@ -35,16 +38,19 @@ Available binaries:
 #### One-line installation (Linux/macOS)
 
 For Linux (x86_64):
+
 ```bash
 curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-linux-amd64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/
 ```
 
 For macOS (Intel):
+
 ```bash
 curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-macos-amd64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/
 ```
 
 For macOS (Apple Silicon):
+
 ```bash
 curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-macos-arm64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/
 ```
@@ -52,11 +58,13 @@ curl -L https://github.com/yourusername/linear-agent/releases/latest/download/li
 #### Manual installation
 
 After downloading, make the file executable (Linux/macOS):
+
 ```bash
 chmod +x linear-agent-*
 ```
 
 Move the executable to a location in your PATH:
+
 ```bash
 sudo mv linear-agent-* /usr/local/bin/linear-agent
 ```
@@ -64,6 +72,7 @@ sudo mv linear-agent-* /usr/local/bin/linear-agent
 ### Updating
 
 You can check for updates using:
+
 ```bash
 linear-agent --check-update
 ```
@@ -79,12 +88,14 @@ If you prefer to build from source:
 1. Install Rust and Cargo ([Install Rust](https://www.rust-lang.org/tools/install))
 
 2. Clone the repository:
+
    ```
    git clone https://github.com/yourusername/linear-agent.git
    cd linear-agent
    ```
 
 3. Build the executable:
+
    ```
    cargo build --release
    ```
@@ -125,14 +136,13 @@ linear-agent --ticket-id LIN-123
 ```
 
 Basic usage will:
+
 1. Fetch tickets assigned to you in Linear
 2. Display a list of tickets
 3. Let you select which tickets to analyze
 4. Save the ticket information as Markdown files in the `tickets/` directory
 
-With the `--plan` flag, it will also:
-5. Generate implementation plans using Claude
-6. Save the implementation plans to the `implementation_plans/` directory
+With the `--plan` flag, it will also: 5. Generate implementation plans using Claude 6. Save the implementation plans to the `implementation_plans/` directory
 
 You can also process a previously saved ticket file to generate an implementation plan without accessing Linear API.
 
@@ -174,6 +184,7 @@ ANTHROPIC_MODEL=claude-3-7-sonnet-20250219
 ```
 
 The tool will look for the `.env` file in the following locations:
+
 1. Path specified with `-e, --env`
 2. `.env` in the current directory
 3. `.linear-agent/.env` in your home directory
