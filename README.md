@@ -25,9 +25,15 @@ A CLI tool that fetches tickets from Linear, enriches them with detailed informa
 
 ### Download pre-built binaries
 
-You can download pre-built binaries from the [GitHub Releases](https://github.com/yourusername/linear-agent/releases) page.
+You can download pre-built binaries from the [GitHub Releases](https://github.com/oorestisime/linear-agent/releases) page.
 
 **Note**: Currently only a single binary is published. The releases may be outdated.
+
+Quick installation using curl:
+
+```bash
+curl -L https://github.com/oorestisime/linear-agent/releases/latest/download/linear-agent -o linear-agent
+```
 
 #### Installation
 
@@ -38,12 +44,14 @@ chmod +x linear-agent
 ```
 
 Move to your local bin directory (recommended, doesn't require sudo):
+
 ```bash
 mkdir -p ~/.local/bin
 mv linear-agent ~/.local/bin/
 ```
 
 Make sure ~/.local/bin is in your PATH. Add this to your ~/.bashrc or ~/.zshrc:
+
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
 ```
@@ -69,7 +77,7 @@ If you prefer to build from source:
 2. Clone the repository:
 
    ```
-   git clone https://github.com/yourusername/linear-agent.git
+   git clone https://github.com/oorestisime/linear-agent.git
    cd linear-agent
    ```
 
@@ -205,7 +213,3 @@ Implementation plans are saved as Markdown files in the output directory (defaul
   - Potential challenges and solutions
   - Testing strategy
   - Estimated effort
-
-## License
-
-MIT

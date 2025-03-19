@@ -705,7 +705,7 @@ async fn check_for_updates() -> Result<()> {
     println!("Current version: {}", current_version);
     
     // GitHub API endpoint for the latest release
-    let github_url = "https://api.github.com/repos/yourusername/linear-agent/releases/latest";
+    let github_url = "https://api.github.com/repos/oorestisime/linear-agent/releases/latest";
     
     // Create a client with proper user-agent header (required by GitHub API)
     let client = reqwest::Client::builder()
@@ -729,18 +729,15 @@ async fn check_for_updates() -> Result<()> {
                     // Compare versions
                     if latest_version != current_version {
                         println!("{}", "A new version is available!".green());
-                        println!("To update, run one of the following commands based on your platform:");
+                        println!("To update, run the following command:");
                         
-                        println!("\nLinux (x86_64):");
-                        println!("curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-linux-amd64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/");
+                        println!("\nDownload and install:");
+                        println!("curl -L https://github.com/oorestisime/linear-agent/releases/latest/download/linear-agent -o linear-agent && chmod +x linear-agent");
                         
-                        println!("\nmacOS (Intel):");
-                        println!("curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-macos-amd64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/");
+                        println!("\nMove to your local bin directory:");
+                        println!("mkdir -p ~/.local/bin && mv linear-agent ~/.local/bin/");
                         
-                        println!("\nmacOS (Apple Silicon):");
-                        println!("curl -L https://github.com/yourusername/linear-agent/releases/latest/download/linear-agent-macos-arm64 -o linear-agent && chmod +x linear-agent && sudo mv linear-agent /usr/local/bin/");
-                        
-                        println!("\nOr download directly from: {}", release["html_url"].as_str().unwrap_or("https://github.com/yourusername/linear-agent/releases"));
+                        println!("\nOr download directly from: {}", release["html_url"].as_str().unwrap_or("https://github.com/oorestisime/linear-agent/releases"));
                     } else {
                         println!("{}", "You are using the latest version!".green());
                     }
